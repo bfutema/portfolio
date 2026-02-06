@@ -1,0 +1,30 @@
+---
+description: Padrões de uso do styled-components
+globs: "**/*.styles.ts"
+alwaysApply: false
+---
+
+# Styled Components
+
+## Estrutura
+
+- Usar arquivos `.styles.ts` para componentes styled
+- Exportar componentes com nomes descritivos (ex: `Button`, `Card`, `Header`)
+- Usar prefixo `$` para props que não devem ser passadas ao DOM (ex: `$variant`, `$size`)
+
+## Tema
+
+- Acessar tokens via `theme`: `${({ theme }) => theme.colors.primary}`
+- Usar tokens do tema em vez de valores hardcoded: `theme.spacing.md`, `theme.fontSize.sm`, `theme.borderRadius.md`
+
+## Exemplo
+
+```ts
+// Button.styles.ts
+import styled from 'styled-components';
+
+export const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+`;
+```

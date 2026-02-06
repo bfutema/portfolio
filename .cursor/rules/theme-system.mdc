@@ -1,0 +1,22 @@
+---
+description: Organização do sistema de tema
+globs: "**/styles/theme/**"
+alwaysApply: false
+---
+
+# Sistema de Tema
+
+## Estrutura em styles/theme/
+
+Cada token em arquivo separado:
+
+- **colors.ts**: Paletas light e dark (background, surface, text, primary, accent, border)
+- **borderRadius.ts**: sm, md, lg, full
+- **fontWeight.ts**: regular, medium, semibold, bold
+- **fontSize.ts**: xs, sm, md, lg, xl
+- **spacing.ts**: xs, sm, md, lg, xl
+
+## index.ts
+
+- Exportar `lightTheme` e `darkTheme` como objetos completos
+- Exportar tipo `Theme` para uso com styled-components

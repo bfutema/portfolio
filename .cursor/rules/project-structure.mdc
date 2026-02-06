@@ -1,0 +1,24 @@
+---
+description: Estrutura de pastas e organização do projeto
+alwaysApply: true
+---
+
+# Estrutura do Projeto
+
+## Organização de Pastas
+
+- **components/**: Componentes genéricos e reutilizáveis. Cada componente em pasta própria com `ComponentName.tsx` e `ComponentName.styles.ts`
+- **pages/**: Páginas da aplicação. Cada página em pasta própria com `PageName.tsx` e `PageName.styles.ts`
+- **hooks/**: Custom hooks reutilizáveis
+- **atoms/**: Jotai atoms para gerenciamento de estado
+- **providers/**: Providers (Context API, ThemeProvider, etc). Ver `.cursor/rules/providers.mdc`
+- **mocks/**: Dados mockados para desenvolvimento
+- **styles/theme/**: Tokens de design (cores, espaçamentos, tipografia)
+- **types/**: Definições TypeScript
+- **utils/**: Funções utilitárias puras
+
+## Separação JSX e Estilos
+
+- Manter JSX em arquivos `.tsx`
+- Manter estilos styled-components em arquivos `.styles.ts` separados
+- Importar estilos como `import * as S from './Component.styles'`

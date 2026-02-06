@@ -1,0 +1,61 @@
+---
+description: Padrão de providers (Context API, ThemeProvider, etc)
+alwaysApply: false
+globs: "**/providers/**"
+---
+
+# Providers
+
+## Localização
+
+Todos os providers ficam em **providers/**.
+
+```
+providers/
+├── AppProviders/     # Composição de todos os providers
+├── AuthProvider/     # Autenticação (Context API)
+├── ThemeProvider/    # Tema styled-components
+└── index.ts          # Re-exports
+```
+
+## Padrão
+
+- Cada provider em pasta própria com `ProviderName.tsx` e `index.ts`
+- **AppProviders**: compõe os demais em ordem (Jotai → Theme → Auth)
+- Providers que usam Context API: criar contexto, provider e hook `useXxx`
+
+## Exemplo Context API
+
+```tsx
+// AuthProvider.tsx
+const AuthContext = createContext<AuthContextValue | null>(null);
+
+export function AuthProvider({ children }: Props) {
+  const [state, setState] = useState(initial);
+  const value = { state, login, logout };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  return ctx;
+}
+```
+
+## Uso no App
+
+```tsx
+// App.tsx
+<AppProviders>
+  <AuthGuard>
+    <Home />
+  </AuthGuard>
+</AppProviders>
+```
+
+## Regras
+
+- Não colocar providers em `components/` — usar `providers/`
+- Exportar hooks de consumo junto ao provider
+- Manter providers desacoplados (cada um com responsabilidade única)

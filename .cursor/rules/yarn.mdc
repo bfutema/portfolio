@@ -1,0 +1,21 @@
+---
+description: Gerenciador de pacotes do projeto
+alwaysApply: true
+---
+
+# Yarn
+
+Este projeto utiliza **Yarn** como gerenciador de pacotes.
+
+## Comandos
+
+- Instalar dependências: `yarn` ou `yarn install`
+- Adicionar pacote: `yarn add <pacote>` (dependência) ou `yarn add -D <pacote>` (dev)
+- Remover pacote: `yarn remove <pacote>`
+- Executar scripts: `yarn dev`, `yarn build`, etc.
+
+## Regras
+
+- **Nunca** usar `npm install` ou `npm run` neste projeto
+- Sempre usar `yarn` para instalação e gerenciamento de dependências
+- O arquivo `yarn.lock` deve ser versionado

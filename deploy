@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+
+# Deploy do Vite (dist/) para GitHub Pages via branch gh-pages
+# Uso:
+#   cd erp
+#   ./deploy
+#
+# Variáveis opcionais:
+#   VITE_BASE_PATH="/<repo>/"   # base do Vite (Project Pages)
+#   GHP_BRANCH="gh-pages"       # branch de deploy
+#   GHP_REMOTE="origin"         # remote
+
+set -euo pipefail
+
+echo "🚀 Iniciando deploy (Vite) para GitHub Pages..."
+
+if ! command -v git >/dev/null 2>&1; then
+  echo "❌ Erro: git não encontrado."
+  exit 1
+fi
+
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "❌ Erro: este diretório não parece ser um repositório git."
+  exit 1
+fi
+
+CURRENT_BRANCH="$(git branch --show-current)"
+GHP_BRANCH="${GHP_BRANCH:-gh-pages}"
+GHP_REMOTE="${GHP_REMOTE:-origin}"
+
+ORIGIN_URL="$(git remote get-url "$GHP_REMOTE" 2>/dev/null || true)"
+REPO_NAME=""
+OWNER_NAME=""
+
+if [[ -n "$ORIGIN_URL" ]]; then
+  # ssh: git@github.com:owner/repo.git
+  # https: https://github.com/owner/repo.git
+  tmp="$ORIGIN_URL"
+  tmp="${tmp%.git}"
+  REPO_NAME="${tmp##*/}"
+  tmp2="$tmp"
+  tmp2="${tmp2%/*}"
+  OWNER_NAME="${tmp2##*/}"
+fi
+
+# Define base path automaticamente (Project Pages) se não foi informado.
+# Se o repo for "<owner>.github.io", usa "/" (User/Org Pages).
+if [[ -z "${VITE_BASE_PATH:-}" ]]; then
+  if [[ -n "$OWNER_NAME" && -n "$REPO_NAME" && "$REPO_NAME" == "${OWNER_NAME}.github.io" ]]; then
+    export VITE_BASE_PATH="/"
+  elif [[ -n "$REPO_NAME" ]]; then
+    export VITE_BASE_PATH="/${REPO_NAME}/"
+  else
+    export VITE_BASE_PATH="/"
+  fi
+fi
+
+echo "ℹ️  Remote: ${GHP_REMOTE} (${ORIGIN_URL:-sem origin})"
+echo "ℹ️  Base path: ${VITE_BASE_PATH}"
+echo "📦 Fazendo build..."
+
+# Instalar deps se necessário
+if [[ ! -d "node_modules" ]]; then
+  yarn install
+fi
+
+yarn build
+
+if [[ ! -d "dist" ]]; then
+  echo "❌ Erro: A pasta 'dist' não foi encontrada. Verifique o build."
+  exit 1
+fi
+
+TEMP_DIR="$(mktemp -d)"
+cp -r dist/. "$TEMP_DIR/"
+
+echo "🌿 Preparando branch ${GHP_BRANCH}..."
+if git show-ref --verify --quiet "refs/heads/${GHP_BRANCH}"; then
+  git checkout "${GHP_BRANCH}"
+  git pull "${GHP_REMOTE}" "${GHP_BRANCH}" || true
+else
+  git checkout --orphan "${GHP_BRANCH}"
+fi
+
+echo "🧹 Limpando arquivos antigos..."
+git rm -rf . --ignore-unmatch 2>/dev/null || true
+find . -maxdepth 1 ! -name '.' ! -name '.git' -exec rm -rf {} + 2>/dev/null || true
+
+echo "📋 Copiando arquivos do build..."
+cp -r "$TEMP_DIR"/. .
+rm -rf "$TEMP_DIR"
+
+# GitHub Pages: evita processamento do Jekyll
+touch .nojekyll
+
+echo "💾 Commitando..."
+git add -A
+git commit -m "Deploy: $(date +'%Y-%m-%d %H:%M:%S')" || echo "Nenhuma mudança para commitar"
+
+echo "⬆️  Push..."
+git push "${GHP_REMOTE}" "${GHP_BRANCH}" --force
+
+echo "🔄 Voltando para ${CURRENT_BRANCH}..."
+git checkout "${CURRENT_BRANCH}"
+
+if [[ -n "$OWNER_NAME" && -n "$REPO_NAME" ]]; then
+  if [[ "$REPO_NAME" == "${OWNER_NAME}.github.io" ]]; then
+    echo "🌐 Site: https://${OWNER_NAME}.github.io/"
+  else
+    echo "🌐 Site: https://${OWNER_NAME}.github.io/${REPO_NAME}/"
+  fi
+else
+  echo "✅ Deploy concluído."
+fi
+

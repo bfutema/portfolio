@@ -1,0 +1,26 @@
+---
+description: Padrões React e separação de responsabilidades
+globs: "**/*.tsx"
+alwaysApply: false
+---
+
+# Padrões React
+
+## Componentes Genéricos (components/)
+
+- Não devem conter lógica de negócio
+- Não fazem fetch, não conhecem rotas nem mocks
+- Recebem dados via props
+- São reutilizáveis em diferentes contextos
+
+## Páginas (pages/)
+
+- Contêm a lógica de orquestração
+- Podem consumir mocks, hooks, contexts
+- Compõem componentes genéricos
+- Conhecem rotas e fluxo da aplicação
+
+## Hooks e Contexts
+
+- Lógica reutilizável em hooks
+- Estado global ou compartilhado em contexts
