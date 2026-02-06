@@ -11,7 +11,7 @@ export const Section = styled.section`
 `;
 
 export const SectionTitle = styled.h2`
-  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-size: clamp(2rem, 4dvw, 2.5rem);
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 ${({ theme }) => theme.spacing['2xl']};

@@ -182,7 +182,7 @@ export const MobileMenu = styled.aside<{ $open: boolean }>`
   top: 0;
   right: 0;
   bottom: 0;
-  width: min(300px, 88vw);
+  width: min(300px, 88dvw);
   background: ${({ theme }) => theme.colors.surface};
   border-left: 1px solid ${({ theme }) => theme.colors.border};
   z-index: 101;

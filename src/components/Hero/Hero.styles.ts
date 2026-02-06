@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const HeroSection = styled.section`
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,7 +29,7 @@ export const Greeting = styled.p`
 `;
 
 export const Name = styled.h1`
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-size: clamp(2.5rem, 8dvw, 4.5rem);
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 ${({ theme }) => theme.spacing.lg};
@@ -55,7 +55,7 @@ export const Cursor = styled.span`
 `;
 
 export const Tagline = styled.p`
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-size: clamp(1rem, 2.5dvw, 1.25rem);
   color: ${({ theme }) => theme.colors.textMuted};
   line-height: 1.6;
   margin: 0 0 ${({ theme }) => theme.spacing['2xl']};
