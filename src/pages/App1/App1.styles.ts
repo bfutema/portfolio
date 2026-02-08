@@ -12,7 +12,7 @@ export const PageWrapper = styled.main`
   background: ${({ theme }) => theme.colors.background};
 `;
 
-const SIDEBAR_WIDTH = '240px';
+const SIDEBAR_WIDTH = '200px';
 
 export const Body = styled.div`
   flex: 1;
@@ -31,7 +31,6 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   padding: ${({ theme }) => theme.spacing.xl};
-  padding-left: ${({ theme }) => theme.spacing['2xl']};
 
   @media (max-width: ${MOBILE_BREAKPOINT}) {
     padding: ${({ theme }) => theme.spacing.xl};
@@ -40,7 +39,5 @@ export const Content = styled.div`
 `;
 
 export const ContentInner = styled.div`
-  max-width: 800px;
   width: 100%;
-  margin: 0 auto;
 `;

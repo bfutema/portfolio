@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { useHoursApp } from '../../../providers/HoursAppProvider';
-import { MonthSelector } from '../components/MonthSelector';
-import { Calendar } from '../components/Calendar';
 import { Dashboard } from '../components/Dashboard';
 import { TaskList } from '../components/TaskList';
+import * as S from './HorasView.styles';
+
+const MONTH_NAMES = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+];
 
 export function HorasView() {
   const {
@@ -13,8 +17,6 @@ export function HorasView() {
     addTask,
     updateTask,
     deleteTask,
-    addRevenueEntry,
-    updateRevenueEntry,
   } = useHoursApp();
 
   const now = new Date();
@@ -45,26 +47,31 @@ export function HorasView() {
     setMonth(today.getMonth());
   };
 
+  const isCurrentMonth = year === now.getFullYear() && month === now.getMonth();
+
   return (
     <>
-      <MonthSelector
-        year={year}
-        month={month}
-        onPrev={handlePrevMonth}
-        onNext={handleNextMonth}
-        onToday={handleToday}
-      />
-      <Calendar
-        tasks={tasks}
-        clients={clients}
-        revenueEntries={revenueEntries}
-        year={year}
-        month={month}
-        onAddTask={addTask}
-        onUpdateTask={updateTask}
-        onAddRevenue={addRevenueEntry}
-        onUpdateRevenue={updateRevenueEntry}
-      />
+      <S.MonthFilterWrapper>
+        <S.TodayButton
+          type="button"
+          $active={isCurrentMonth}
+          onClick={handleToday}
+          aria-label="Ir para hoje"
+        >
+          Hoje
+        </S.TodayButton>
+        <S.MonthFilterNav>
+          <S.MonthFilterBtn type="button" onClick={handlePrevMonth} aria-label="Mês anterior">
+            ‹
+          </S.MonthFilterBtn>
+          <S.MonthFilterLabel>
+            {MONTH_NAMES[month]} {year}
+          </S.MonthFilterLabel>
+          <S.MonthFilterBtn type="button" onClick={handleNextMonth} aria-label="Próximo mês">
+            ›
+          </S.MonthFilterBtn>
+        </S.MonthFilterNav>
+      </S.MonthFilterWrapper>
       <Dashboard
         tasks={tasks}
         clients={clients}

@@ -1,52 +1,52 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+export const Form = styled.form`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: ${({ theme }) => theme.spacing.lg};
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
   padding: ${({ theme }) => theme.spacing.lg};
 `;
 
-export const Button = styled.button`
+export const Field = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  background: ${({ theme }) => theme.colors.surface};
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xs};
+`;
+
+export const Label = styled.label`
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.textMuted};
+`;
+
+export const Input = styled.input`
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.fontSize.md};
+  color: ${({ theme }) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.background};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.md};
-  color: ${({ theme }) => theme.colors.text};
-  cursor: pointer;
-  transition: all 0.2s ease;
 
-  &:hover {
+  &:focus {
+    outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
-export const Label = styled.span`
-  font-size: ${({ theme }) => theme.fontSize.lg};
-  font-weight: ${({ theme }) => theme.fontWeight.semibold};
-  color: ${({ theme }) => theme.colors.text};
-  min-width: 140px;
-  text-align: center;
+export const Buttons = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
-export const TodayButton = styled.button<{ $active?: boolean }>`
+export const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-left: ${({ theme }) => theme.spacing.md};
 
-  ${({ theme, $active }) =>
-    $active
+  ${({ $variant = 'primary', theme }) =>
+    $variant === 'primary'
       ? `
     background: ${theme.colors.primary};
     color: white;

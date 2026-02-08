@@ -2,51 +2,57 @@
   "hash": "108305ed",
   "configHash": "2d3bd207",
   "lockfileHash": "bf3a3f74",
-  "browserHash": "11a70cd9",
+  "browserHash": "59609839",
   "optimized": {
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "7a47de10",
+      "fileHash": "8ece16b3",
       "needsInterop": true
     },
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "a0f3471c",
+      "fileHash": "372703dc",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "457eaa28",
+      "fileHash": "d7ff3bfd",
       "needsInterop": true
     },
     "react-router-dom": {
       "src": "../../node_modules/react-router-dom/dist/index.mjs",
       "file": "react-router-dom.js",
-      "fileHash": "189658f6",
+      "fileHash": "5154df3e",
       "needsInterop": false
     },
     "styled-components": {
       "src": "../../node_modules/styled-components/dist/styled-components.browser.esm.js",
       "file": "styled-components.js",
-      "fileHash": "c61661b2",
+      "fileHash": "d4d0fe20",
       "needsInterop": false
     },
     "framer-motion": {
       "src": "../../node_modules/framer-motion/dist/es/index.mjs",
       "file": "framer-motion.js",
-      "fileHash": "32f92198",
+      "fileHash": "c5e8cff1",
       "needsInterop": false
+    },
+    "react-dom": {
+      "src": "../../node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "94dd6dba",
+      "needsInterop": true
     }
   },
   "chunks": {
-    "chunk-HTXT7PMO": {
-      "file": "chunk-HTXT7PMO.js"
-    },
     "chunk-HI5U6ZQS": {
       "file": "chunk-HI5U6ZQS.js"
+    },
+    "chunk-MSIY2JIB": {
+      "file": "chunk-MSIY2JIB.js"
     },
     "chunk-HIMZ6MGI": {
       "file": "chunk-HIMZ6MGI.js"

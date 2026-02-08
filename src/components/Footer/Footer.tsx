@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <S.FooterWrapper>
       <S.Copyright>
-        © {year} <S.NameLink to="/apps">Bruno Futema</S.NameLink>. Desenvolvido com dedicação.
+        © {year} <S.NameLink to="/backoffice">Bruno Futema</S.NameLink>. Desenvolvido com dedicação.
       </S.Copyright>
     </S.FooterWrapper>
   );

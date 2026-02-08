@@ -1,0 +1,1 @@
+export { DespesasAvulsasTable } from './DespesasAvulsasTable';

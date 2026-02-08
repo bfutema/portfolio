@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as S from './TaskForm.styles';
-import { DateInput } from '../../../../components/DateInput';
+import { DatePicker } from '../../../../components/DatePicker';
 import { TimeInput } from '../../../../components/TimeInput';
 import { useHoursApp } from '../../../../providers/HoursAppProvider';
 import { formatCurrency, MASKED_CURRENCY } from '../../../../utils/hoursStorage';
@@ -122,7 +122,7 @@ export function TaskForm({
       )}
       <S.Field>
         <S.Label>Data</S.Label>
-        <DateInput
+        <DatePicker
           value={date}
           onChange={setDate}
           placeholder="dd/mm/aaaa"

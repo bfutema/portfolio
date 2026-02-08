@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as S from './RevenueEntryForm.styles';
-import { DateInput } from '../../../../components/DateInput';
+import { DatePicker } from '../../../../components/DatePicker';
 import type { RevenueEntry } from '../../../../types/hoursApp';
 
 interface RevenueEntryFormProps {
@@ -79,7 +79,7 @@ export function RevenueEntryForm({
       )}
       <S.Field>
         <S.Label>Data da receita</S.Label>
-        <DateInput value={date} onChange={setDate} placeholder="dd/mm/aaaa" required />
+        <DatePicker value={date} onChange={setDate} placeholder="dd/mm/aaaa" required />
       </S.Field>
       <S.Field>
         <S.Label htmlFor="revenue-value">Valor (R$)</S.Label>

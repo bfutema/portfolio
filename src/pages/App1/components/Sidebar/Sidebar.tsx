@@ -15,8 +15,13 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { exportData, applyImport } = useHoursApp();
 
-  const isHoras = location.pathname.endsWith('/horas') || location.pathname.endsWith('/app1');
+  const isHome = location.pathname.endsWith('/home') || location.pathname.endsWith('/backoffice');
+  const isHoras = location.pathname.endsWith('/horas');
   const isClientes = location.pathname.endsWith('/clientes');
+  const isContasAPagar = location.pathname.endsWith('/contas-a-pagar');
+  const isLembretesRecorrentes = location.pathname.endsWith('/lembretes-recorrentes');
+  const isReceitasAvulsas = location.pathname.endsWith('/receitas-avulsas');
+  const isDespesasAvulsas = location.pathname.endsWith('/despesas-avulsas');
 
   const handleNavClick = () => {
     setOpen(false);
@@ -82,17 +87,37 @@ export function Sidebar({ onNavigate }: SidebarProps) {
 
       <S.SidebarWrapper $open={open}>
         <S.SidebarHeader>
-          <S.SidebarTitle>Controle de Horas</S.SidebarTitle>
+          <S.SidebarTitle>Backoffice</S.SidebarTitle>
         </S.SidebarHeader>
 
         <S.NavList>
-          <S.NavItem as={Link} to="/app1/horas" $active={isHoras} onClick={handleNavClick}>
+          <S.NavItem as={Link} to="/backoffice/home" $active={isHome} onClick={handleNavClick}>
+            <S.NavIcon>🏠</S.NavIcon>
+            Home
+          </S.NavItem>
+          <S.NavItem as={Link} to="/backoffice/horas" $active={isHoras} onClick={handleNavClick}>
             <S.NavIcon>⏱</S.NavIcon>
             Horas
           </S.NavItem>
-          <S.NavItem as={Link} to="/app1/clientes" $active={isClientes} onClick={handleNavClick}>
+          <S.NavItem as={Link} to="/backoffice/clientes" $active={isClientes} onClick={handleNavClick}>
             <S.NavIcon>👥</S.NavIcon>
             Clientes
+          </S.NavItem>
+          <S.NavItem as={Link} to="/backoffice/contas-a-pagar" $active={isContasAPagar} onClick={handleNavClick}>
+            <S.NavIcon>📋</S.NavIcon>
+            Contas a pagar
+          </S.NavItem>
+          <S.NavItem as={Link} to="/backoffice/lembretes-recorrentes" $active={isLembretesRecorrentes} onClick={handleNavClick}>
+            <S.NavIcon>🔄</S.NavIcon>
+            Lembretes
+          </S.NavItem>
+          <S.NavItem as={Link} to="/backoffice/receitas-avulsas" $active={isReceitasAvulsas} onClick={handleNavClick}>
+            <S.NavIcon>💰</S.NavIcon>
+            Receitas
+          </S.NavItem>
+          <S.NavItem as={Link} to="/backoffice/despesas-avulsas" $active={isDespesasAvulsas} onClick={handleNavClick}>
+            <S.NavIcon>💳</S.NavIcon>
+            Despesas
           </S.NavItem>
         </S.NavList>
 
@@ -114,13 +139,6 @@ export function Sidebar({ onNavigate }: SidebarProps) {
           />
           {importError && <S.ImportError>{importError}</S.ImportError>}
         </S.DataActions>
-
-        <S.SidebarFooter>
-          <S.BackLink as={Link} to="/" onClick={handleNavClick}>
-            <S.NavIcon>←</S.NavIcon>
-            Voltar ao portfólio
-          </S.BackLink>
-        </S.SidebarFooter>
       </S.SidebarWrapper>
     </>
   );

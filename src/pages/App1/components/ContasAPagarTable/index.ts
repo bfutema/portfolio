@@ -1,0 +1,1 @@
+export { ContasAPagarTable } from './ContasAPagarTable';

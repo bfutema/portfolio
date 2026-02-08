@@ -10,7 +10,7 @@ export function App1Header() {
       <S.BackLink as={Link} to="/">
         ← Voltar ao portfólio
       </S.BackLink>
-      <S.Title>Controle de Horas</S.Title>
+      <S.Title>Backoffice</S.Title>
       <S.EyeButton
         type="button"
         onClick={toggleValuesVisibility}

@@ -10,15 +10,89 @@ export const Wrapper = styled.div`
   box-shadow: 0 1px 3px ${({ theme }) => theme.colors.text}08;
 `;
 
+export const CalendarHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: ${({ theme }) => theme.spacing.md} 16px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+export const TodayButton = styled.button<{ $active?: boolean }>`
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  ${({ theme, $active }) =>
+    $active
+      ? `
+    background: ${theme.colors.primary};
+    color: white;
+    border: none;
+
+    &:hover {
+      background: ${theme.colors.primaryHover};
+    }
+  `
+      : `
+    background: transparent;
+    color: ${theme.colors.textMuted};
+    border: 1px solid ${theme.colors.border};
+
+    &:hover {
+      border-color: ${theme.colors.primary};
+      color: ${theme.colors.primary};
+    }
+  `}
+`;
+
+export const MonthNav = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const MonthNavButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  color: ${({ theme }) => theme.colors.text};
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+export const MonthLabel = styled.span`
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  color: ${({ theme }) => theme.colors.text};
+  min-width: 140px;
+  text-align: center;
+`;
+
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-auto-rows: minmax(64px, 64px);
-  min-height: 420px;
+  grid-auto-rows: minmax(110px, 110px);
+  min-height: 700px;
 
   @media (max-width: ${MOBILE_BREAKPOINT}) {
-    grid-auto-rows: minmax(52px, 52px);
-    min-height: 320px;
+    grid-auto-rows: minmax(80px, 80px);
+    min-height: 480px;
   }
 `;
 
@@ -183,6 +257,66 @@ export const RevenueChip = styled.span`
 
   &:hover {
     background: ${({ theme }) => theme.colors.success}35;
+  }
+
+  @media (max-width: ${MOBILE_BREAKPOINT}) {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-left-width: 2px;
+  }
+`;
+
+export const ReminderChip = styled.span<{ $paid?: boolean }>`
+  flex-shrink: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 10px;
+  line-height: 1.3;
+  color: ${({ theme, $paid }) => ($paid ? theme.colors.success : theme.colors.accent)};
+  background: ${({ theme, $paid }) => ($paid ? theme.colors.success + '20' : theme.colors.accent + '25')};
+  border-left: 3px solid ${({ theme, $paid }) => ($paid ? theme.colors.success : theme.colors.accent)};
+  border-radius: 0 ${({ theme }) => theme.borderRadius.sm} ${({ theme }) => theme.borderRadius.sm} 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  max-width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ theme, $paid }) => ($paid ? theme.colors.success + '35' : theme.colors.accent + '40')};
+  }
+
+  @media (max-width: ${MOBILE_BREAKPOINT}) {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-left-width: 2px;
+  }
+`;
+
+export const ExpenseChip = styled.span`
+  flex-shrink: 1;
+  display: block;
+  padding: 3px 8px;
+  font-size: 10px;
+  line-height: 1.3;
+  color: ${({ theme }) => theme.colors.error};
+  background: ${({ theme }) => theme.colors.error}15;
+  border-left: 3px solid ${({ theme }) => theme.colors.error};
+  border-radius: 0 ${({ theme }) => theme.borderRadius.sm} ${({ theme }) => theme.borderRadius.sm} 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  max-width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.error}25;
   }
 
   @media (max-width: ${MOBILE_BREAKPOINT}) {

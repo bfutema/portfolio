@@ -5,6 +5,11 @@ import type {
   ExportData,
   RevenueEntry,
   EncryptedExportPayload,
+  TaxReminder,
+  RecurringReminder,
+  RecurringPayment,
+  OneOffExpense,
+  OneOffRevenue,
 } from '../types/hoursApp';
 
 const TASKS_KEY = 'hours-app-tasks';
@@ -12,7 +17,12 @@ const CLIENTS_KEY = 'hours-app-clients';
 const REVENUE_KEY = 'hours-app-revenue';
 const SETTINGS_KEY = 'hours-app-settings';
 const VALUES_HIDDEN_KEY = 'hours-app-values-hidden';
-const EXPORT_VERSION = 4;
+const TAX_REMINDERS_KEY = 'hours-app-tax-reminders';
+const RECURRING_REMINDERS_KEY = 'hours-app-recurring-reminders';
+const RECURRING_PAYMENTS_KEY = 'hours-app-recurring-payments';
+const ONE_OFF_EXPENSES_KEY = 'hours-app-one-off-expenses';
+const ONE_OFF_REVENUES_KEY = 'hours-app-one-off-revenues';
+const EXPORT_VERSION = 6;
 const ENCRYPTED_FORMAT = 'hours-app-encrypted';
 const PBKDF2_ITERATIONS = 250000;
 const SALT_LENGTH = 16;
@@ -187,6 +197,114 @@ export function saveSettings(settings: AppSettings): void {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
 }
 
+export function loadTaxReminders(): TaxReminder[] {
+  try {
+    const data = localStorage.getItem(TAX_REMINDERS_KEY);
+    const parsed = data ? JSON.parse(data) : [];
+    const items = Array.isArray(parsed) ? parsed : [];
+    return items.map((r: Record<string, unknown>) => ({
+      id: (r.id as string) ?? crypto.randomUUID(),
+      type: 'parcel' as const,
+      source: (r.source as TaxReminder['source']) ?? 'PGFN',
+      dueDate: (r.dueDate as string) ?? '',
+      amount: Number(r.amount) || 0,
+      description: (r.description as string) ?? '',
+      paidAt: r.paidAt as string | undefined,
+      paidAmount: r.paidAmount as number | undefined,
+    })) as TaxReminder[];
+  } catch {
+    return [];
+  }
+}
+
+export function saveTaxReminders(items: TaxReminder[]): void {
+  localStorage.setItem(TAX_REMINDERS_KEY, JSON.stringify(items));
+}
+
+export function loadRecurringReminders(): RecurringReminder[] {
+  try {
+    const data = localStorage.getItem(RECURRING_REMINDERS_KEY);
+    const parsed = data ? JSON.parse(data) : [];
+    const items = Array.isArray(parsed) ? parsed : [];
+    return items.map((r: Record<string, unknown>) => ({
+      id: (r.id as string) ?? crypto.randomUUID(),
+      type: 'recurring' as const,
+      source: (r.source as string) ?? '',
+      dayOfMonth: Number(r.dayOfMonth) || 1,
+      description: (r.description as string) ?? '',
+      amount: r.amount != null ? Number(r.amount) : undefined,
+    })) as RecurringReminder[];
+  } catch {
+    return [];
+  }
+}
+
+export function saveRecurringReminders(items: RecurringReminder[]): void {
+  localStorage.setItem(RECURRING_REMINDERS_KEY, JSON.stringify(items));
+}
+
+export function loadRecurringPayments(): RecurringPayment[] {
+  try {
+    const data = localStorage.getItem(RECURRING_PAYMENTS_KEY);
+    const parsed = data ? JSON.parse(data) : [];
+    const items = Array.isArray(parsed) ? parsed : [];
+    return items.map((p: Record<string, unknown>) => ({
+      id: (p.id as string) ?? crypto.randomUUID(),
+      reminderId: (p.reminderId as string) ?? '',
+      month: (p.month as string) ?? '',
+      paidAt: (p.paidAt as string) ?? '',
+      paidAmount: Number(p.paidAmount) || 0,
+    })) as RecurringPayment[];
+  } catch {
+    return [];
+  }
+}
+
+export function saveRecurringPayments(items: RecurringPayment[]): void {
+  localStorage.setItem(RECURRING_PAYMENTS_KEY, JSON.stringify(items));
+}
+
+export function loadOneOffExpenses(): OneOffExpense[] {
+  try {
+    const data = localStorage.getItem(ONE_OFF_EXPENSES_KEY);
+    const parsed = data ? JSON.parse(data) : [];
+    const items = Array.isArray(parsed) ? parsed : [];
+    return items.map((e: Record<string, unknown>) => ({
+      id: (e.id as string) ?? crypto.randomUUID(),
+      date: (e.date as string) ?? '',
+      amount: Number(e.amount) || 0,
+      description: (e.description as string) ?? '',
+    })) as OneOffExpense[];
+  } catch {
+    return [];
+  }
+}
+
+export function saveOneOffExpenses(items: OneOffExpense[]): void {
+  localStorage.setItem(ONE_OFF_EXPENSES_KEY, JSON.stringify(items));
+}
+
+export function loadOneOffRevenues(): OneOffRevenue[] {
+  try {
+    const data = localStorage.getItem(ONE_OFF_REVENUES_KEY);
+    const parsed = data ? JSON.parse(data) : [];
+    const items = Array.isArray(parsed) ? parsed : [];
+    return items.map((e: Record<string, unknown>) => ({
+      id: (e.id as string) ?? crypto.randomUUID(),
+      date: (e.date as string) ?? '',
+      amount: Number(e.amount) || 0,
+      description: (e.description as string) ?? '',
+      transferType: (e.transferType === 'PIX' ? 'PIX' : 'TED') as OneOffRevenue['transferType'],
+    })) as OneOffRevenue[];
+  } catch {
+    return [];
+  }
+}
+
+export function saveOneOffRevenues(items: OneOffRevenue[]): void {
+  localStorage.setItem(ONE_OFF_REVENUES_KEY, JSON.stringify(items));
+}
+
 /**
  * Converte um horário "HH:MM" ou "HH:MM:SS" para minutos totais.
  */
@@ -244,7 +362,12 @@ export function buildExportData(
   clients: Client[],
   revenueEntries: RevenueEntry[],
   settings: AppSettings,
-  valuesHidden: boolean
+  valuesHidden: boolean,
+  taxReminders: TaxReminder[],
+  recurringReminders: RecurringReminder[],
+  recurringPayments: RecurringPayment[],
+  oneOffExpenses: OneOffExpense[],
+  oneOffRevenues: OneOffRevenue[]
 ): ExportData {
   return {
     version: EXPORT_VERSION,
@@ -254,6 +377,11 @@ export function buildExportData(
     revenueEntries,
     settings,
     valuesHidden,
+    taxReminders,
+    recurringReminders,
+    recurringPayments,
+    oneOffExpenses,
+    oneOffRevenues,
   };
 }
 
@@ -262,9 +390,25 @@ export function exportToJson(
   clients: Client[],
   revenueEntries: RevenueEntry[],
   settings: AppSettings,
-  valuesHidden: boolean
+  valuesHidden: boolean,
+  taxReminders: TaxReminder[],
+  recurringReminders: RecurringReminder[],
+  recurringPayments: RecurringPayment[],
+  oneOffExpenses: OneOffExpense[],
+  oneOffRevenues: OneOffRevenue[]
 ): string {
-  const data = buildExportData(tasks, clients, revenueEntries, settings, valuesHidden);
+  const data = buildExportData(
+    tasks,
+    clients,
+    revenueEntries,
+    settings,
+    valuesHidden,
+    taxReminders,
+    recurringReminders,
+    recurringPayments,
+    oneOffExpenses,
+    oneOffRevenues
+  );
   return JSON.stringify(data, null, 2);
 }
 
@@ -274,9 +418,25 @@ export async function downloadEncryptedExport(
   revenueEntries: RevenueEntry[],
   settings: AppSettings,
   valuesHidden: boolean,
-  password: string
+  password: string,
+  taxReminders: TaxReminder[],
+  recurringReminders: RecurringReminder[],
+  recurringPayments: RecurringPayment[],
+  oneOffExpenses: OneOffExpense[],
+  oneOffRevenues: OneOffRevenue[]
 ): Promise<void> {
-  const data = buildExportData(tasks, clients, revenueEntries, settings, valuesHidden);
+  const data = buildExportData(
+    tasks,
+    clients,
+    revenueEntries,
+    settings,
+    valuesHidden,
+    taxReminders,
+    recurringReminders,
+    recurringPayments,
+    oneOffExpenses,
+    oneOffRevenues
+  );
   const json = JSON.stringify(data);
   const payload = await encryptPayload(json, password);
   const blob = new Blob([JSON.stringify(payload, null, 2)], {
@@ -299,6 +459,11 @@ export interface ImportResult {
   revenueEntries: RevenueEntry[];
   settings: AppSettings;
   valuesHidden: boolean;
+  taxReminders: TaxReminder[];
+  recurringReminders: RecurringReminder[];
+  recurringPayments: RecurringPayment[];
+  oneOffExpenses: OneOffExpense[];
+  oneOffRevenues: OneOffRevenue[];
 }
 
 function parseExportData(parsed: ExportData & Record<string, unknown>): ImportResult {
@@ -344,7 +509,87 @@ function parseExportData(parsed: ExportData & Record<string, unknown>): ImportRe
     ? { hourlyRate: Number(parsed.settings.hourlyRate) || 0 }
     : { hourlyRate: 0 };
   const valuesHidden = Boolean(parsed.valuesHidden);
-  return { tasks, clients, revenueEntries, settings, valuesHidden };
+
+  const taxReminders: TaxReminder[] = Array.isArray(parsed.taxReminders)
+    ? parsed.taxReminders.map((r: unknown) => {
+        const obj = r as Record<string, unknown>;
+        return {
+          id: (obj.id as string) ?? crypto.randomUUID(),
+          type: 'parcel' as const,
+          source: (obj.source as TaxReminder['source']) ?? 'PGFN',
+          dueDate: (obj.dueDate as string) ?? '',
+          amount: Number(obj.amount) || 0,
+          description: (obj.description as string) ?? '',
+          paidAt: obj.paidAt as string | undefined,
+          paidAmount: obj.paidAmount as number | undefined,
+        };
+      })
+    : [];
+
+  const recurringReminders: RecurringReminder[] = Array.isArray(parsed.recurringReminders)
+    ? parsed.recurringReminders.map((r: unknown) => {
+        const obj = r as Record<string, unknown>;
+        return {
+          id: (obj.id as string) ?? crypto.randomUUID(),
+          type: 'recurring' as const,
+          source: (obj.source as string) ?? '',
+          dayOfMonth: Number(obj.dayOfMonth) || 1,
+          description: (obj.description as string) ?? '',
+          amount: obj.amount != null ? Number(obj.amount) : undefined,
+        };
+      })
+    : [];
+
+  const recurringPayments: RecurringPayment[] = Array.isArray(parsed.recurringPayments)
+    ? parsed.recurringPayments.map((p: unknown) => {
+        const obj = p as Record<string, unknown>;
+        return {
+          id: (obj.id as string) ?? crypto.randomUUID(),
+          reminderId: (obj.reminderId as string) ?? '',
+          month: (obj.month as string) ?? '',
+          paidAt: (obj.paidAt as string) ?? '',
+          paidAmount: Number(obj.paidAmount) || 0,
+        };
+      })
+    : [];
+
+  const oneOffExpenses: OneOffExpense[] = Array.isArray(parsed.oneOffExpenses)
+    ? parsed.oneOffExpenses.map((e: unknown) => {
+        const obj = e as Record<string, unknown>;
+        return {
+          id: (obj.id as string) ?? crypto.randomUUID(),
+          date: (obj.date as string) ?? '',
+          amount: Number(obj.amount) || 0,
+          description: (obj.description as string) ?? '',
+        };
+      })
+    : [];
+
+  const oneOffRevenues: OneOffRevenue[] = Array.isArray(parsed.oneOffRevenues)
+    ? parsed.oneOffRevenues.map((e: unknown) => {
+        const obj = e as Record<string, unknown>;
+        return {
+          id: (obj.id as string) ?? crypto.randomUUID(),
+          date: (obj.date as string) ?? '',
+          amount: Number(obj.amount) || 0,
+          description: (obj.description as string) ?? '',
+          transferType: obj.transferType === 'PIX' ? 'PIX' : 'TED',
+        };
+      })
+    : [];
+
+  return {
+    tasks,
+    clients,
+    revenueEntries,
+    settings,
+    valuesHidden,
+    taxReminders,
+    recurringReminders,
+    recurringPayments,
+    oneOffExpenses,
+    oneOffRevenues,
+  };
 }
 
 export async function importFromFile(

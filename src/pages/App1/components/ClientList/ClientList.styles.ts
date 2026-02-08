@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  padding: 0 ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.xl};
+  padding: 0 0 ${({ theme }) => theme.spacing.xl};
 `;
 
 export const SectionTitle = styled.h2`

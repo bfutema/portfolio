@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const SIDEBAR_WIDTH = '240px';
+const SIDEBAR_WIDTH = '200px';
 const MOBILE_BREAKPOINT = '768px';
 
 export const SidebarWrapper = styled.aside<{ $open?: boolean }>`
@@ -10,8 +10,8 @@ export const SidebarWrapper = styled.aside<{ $open?: boolean }>`
   border-right: 1px solid ${({ theme }) => theme.colors.border};
   display: flex;
   flex-direction: column;
-  padding: ${({ theme }) => theme.spacing.lg};
-  padding-top: ${({ theme }) => theme.spacing['2xl']};
+  padding: ${({ theme }) => theme.spacing.md};
+  padding-top: ${({ theme }) => theme.spacing.xl};
   position: fixed;
   top: var(--app-header-height, 56px);
   left: 0;
@@ -34,11 +34,11 @@ export const SidebarWrapper = styled.aside<{ $open?: boolean }>`
 `;
 
 export const SidebarHeader = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing['2xl']};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
 export const SidebarTitle = styled.h1`
-  font-size: ${({ theme }) => theme.fontSize.lg};
+  font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text};
   margin: 0;
@@ -47,16 +47,16 @@ export const SidebarTitle = styled.h1`
 export const NavList = styled.nav`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
+  gap: 2px;
   flex: 1;
 `;
 
 export const NavItem = styled.a<{ $active?: boolean }>`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.md};
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
-  font-size: ${({ theme }) => theme.fontSize.md};
+  gap: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme, $active }) => ($active ? theme.colors.primary : theme.colors.textMuted)};
   text-decoration: none;
@@ -77,25 +77,25 @@ export const NavItem = styled.a<{ $active?: boolean }>`
 `;
 
 export const NavIcon = styled.span`
-  font-size: 1.25rem;
-  width: 24px;
+  font-size: 1rem;
+  width: 20px;
   text-align: center;
 `;
 
 export const DataActions = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-  padding: ${({ theme }) => theme.spacing.lg} 0;
+  gap: 2px;
+  padding: ${({ theme }) => theme.spacing.md} 0;
   border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 export const DataButton = styled.button`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.md};
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
-  font-size: ${({ theme }) => theme.fontSize.sm};
+  gap: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text};
   background: transparent;
@@ -114,28 +114,6 @@ export const ImportError = styled.p`
   font-size: ${({ theme }) => theme.fontSize.xs};
   color: ${({ theme }) => theme.colors.error};
   margin: 0;
-`;
-
-export const SidebarFooter = styled.div`
-  padding-top: ${({ theme }) => theme.spacing.xl};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
-`;
-
-export const BackLink = styled.a`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.md};
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.colors.textMuted};
-  text-decoration: none;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.surfaceElevated};
-    color: ${({ theme }) => theme.colors.primary};
-  }
 `;
 
 export const MenuButton = styled.button`
